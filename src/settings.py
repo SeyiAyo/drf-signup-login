@@ -40,12 +40,25 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     #My APPs
-    'first',
     'rest_framework',
+    'MyApi',
+    'rest_framework_simplejwt',
+    'corsheaders',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+#AUTH_USER_MODEL = 'MyApi.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #'path.to.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True # Allow all origins
 
 ROOT_URLCONF = 'src.urls'
 
@@ -85,6 +100,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'MyApi.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
