@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     #My APPs
     'rest_framework',
+    'rest_framework.authtoken',
     'MyApi',
     'rest_framework_simplejwt',
     'corsheaders',

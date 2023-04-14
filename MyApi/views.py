@@ -12,6 +12,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework import generics, fields, viewsets
 from rest_framework import status
+from rest_framework.authtoken.models import Token
+
 
 
 
@@ -29,20 +31,23 @@ class SignupView(viewsets.ModelViewSet):
 
 
 class LoginView(APIView):
-    permission_classes = [AllowAny]
+    """
+    Custom Login View using Django Rest Framework
+    """
 
     def post(self, request):
-        username = request.data.get('username')
+        """
+        Authenticate user and return Token
+        """
+        email = request.data.get('email')
         password = request.data.get('password')
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
 
         if user is None:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Invalid Email or Password'},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
-        refresh = RefreshToken.for_user(user)
+        token, created = Token.objects.get_or_create(user=user)
 
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        })
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
